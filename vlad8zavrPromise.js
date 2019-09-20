@@ -26,10 +26,12 @@ let promise = new Vlad8zavrPromise((resolve, reject) => {
     console.log('-------------------');
 })
 
-promise.then(() => {
-    setTimeout(() => {
-        console.log('THEN OPTION');
-    }, 1000)
-})
-
+promise
+    .then(() => {
+        return new Vlad8zavrPromise((resolve, reject) => {
+            setTimeout(() => {
+                console.log('THEN OPTION 1');
+            }, 1000)
+        })
+    })
 

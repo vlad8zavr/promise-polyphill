@@ -7,7 +7,14 @@ function Vlad8zavrPromise(callback) {
 
     callback(this.resolve, this.reject);
 
-    this.then = function() {}
+    this.then = function(callbackThen) {
+
+        callbackThen();
+        
+        // return new Vlad8zavrPromise((resolve, reject) => {
+        //     callbackThen();
+        // })
+    }
     this.catch = function() {}
 
 }
@@ -18,3 +25,11 @@ let promise = new Vlad8zavrPromise((resolve, reject) => {
     reject();
     console.log('-------------------');
 })
+
+promise.then(() => {
+    setTimeout(() => {
+        console.log('THEN OPTION');
+    }, 1000)
+})
+
+

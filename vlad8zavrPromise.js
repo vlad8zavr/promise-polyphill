@@ -2,15 +2,40 @@
 
 function Vlad8zavrPromise(callback) {
 
-    this.resolve = function() { console.log('resolve'); console.log(this); }
-    this.reject  = function() { console.log('reject'); console.log(this); }
+    this.thenChain = [];
 
-    callback(this.resolve.bind(this), this.reject.bind(this));
-    //callback(this.resolve, this.reject);
+    this.resolve = function(data) { 
+        console.log('resolve'); console.log(data); console.log(this);
 
+        this.thenChain.forEach(callbackItem => {
+            data = callbackItem(data);
+        })
+    }
+    this.reject  = function(error) { console.log('reject'); console.log(this); }
+
+    // ------------------------
+    function resolve(data) {
+        this.thenChain.forEach(callbackItem => {
+            data = callbackItem(data);
+        })
+    }
+    function reject() {}
+    // --------------------------
+
+    callback(resolve.bind(this), reject.bind(this));
+
+    //callback(this.resolve.bind(this), this.reject.bind(this));
+
+    
+    // пробрасывать данные
     this.then = function(callbackThen) {
 
-        callbackThen();
+        // выполняется сразу, не дожидается окончания предыдущего
+        // нужно передать выполнение в resolve()
+        //callbackThen();
+
+        this.thenChain.push(callbackThen);
+
         return this;
 
     }
@@ -19,19 +44,25 @@ function Vlad8zavrPromise(callback) {
 
 }
 
-let promise = new Vlad8zavrPromise((resolve, reject) => {
-    console.log('----- promise -----');
-    resolve(1);
-    reject();
-    console.log('-------------------');
+const promise = new Vlad8zavrPromise((resolve, reject) => {
+    setTimeout(() => {
+        resolve(2);
+    }, 2000)
 })
 
 promise
-    .then(number => number + 2)
-    .then(number => number + 2)
-    .then(number => console.log(number))
+    .then(num => num += 2)
+    .then(num => num += 2)
+    .then(num => { console.log(num); })
 
-// promise
+// let promise1 = new Vlad8zavrPromise((resolve, reject) => {
+//     console.log('----- promise -----');
+//     resolve(1);
+//     //reject();
+//     console.log('-------------------');
+// })
+
+// promise1
 //     .then(() => {
 //         return new Vlad8zavrPromise((resolve, reject) => {
 //             setTimeout(() => {

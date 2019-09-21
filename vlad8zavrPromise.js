@@ -2,11 +2,11 @@
 
 function Vlad8zavrPromise(callback) {
 
-    this.resolve = function() { console.log('resolve'); }
-    this.reject  = function() { console.log('reject'); }
+    this.resolve = function() { console.log('resolve'); console.log(this); }
+    this.reject  = function() { console.log('reject'); console.log(this); }
 
-    //callback(this.resolve.bind(this), this.reject.bind(this));
-    callback(this.resolve, this.reject);
+    callback(this.resolve.bind(this), this.reject.bind(this));
+    //callback(this.resolve, this.reject);
 
     this.then = function(callbackThen) {
 

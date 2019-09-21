@@ -3,13 +3,19 @@
 function Vlad8zavrPromise(callback) {
 
     this.thenChain = [];
+    this.isActiveProcess = false;
 
     function resolve(data) {
+        if (!this.isActiveProcess) this.isActiveProcess = true;
         this.thenChain.forEach(callbackItem => {
             data = callbackItem(data);
         })
     }
-    function reject(error) { console.log('reject'); console.log(error); }
+    function reject(error) { 
+        if (!this.isActiveProcess) {
+            console.log('[reject]', error); 
+        }
+    }
 
     callback(resolve.bind(this), reject.bind(this));
 
@@ -29,10 +35,14 @@ function Vlad8zavrPromise(callback) {
 
 const promise = new Vlad8zavrPromise((resolve, reject) => {
     setTimeout(() => {
-        let isSuccess = Math.floor(Math.random() * 10) > 4;
-        if (isSuccess) resolve(2);
-        else reject('error message');
-        //resolve(2);
+
+        // let isSuccess = Math.floor(Math.random() * 10) > 4;
+        // if (isSuccess) resolve(2);
+        // else reject('error message');
+
+        setTimeout(() => { resolve(2); }, 500);
+        setTimeout(() => { reject('error message'); }, 1000);
+
     }, 1000)
 })
 

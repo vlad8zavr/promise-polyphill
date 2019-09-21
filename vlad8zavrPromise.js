@@ -8,7 +8,7 @@ function Vlad8zavrPromise(callback) {
     function resolve(data) {
         if (!this.isActiveProcess) {
             this.isActiveProcess = true;
-            this.thenChain.forEach(callbackItem => {
+            this.thenChain.forEach(function(callbackItem) {
                 data = callbackItem(data);
             })
         }
@@ -16,7 +16,7 @@ function Vlad8zavrPromise(callback) {
     function reject(error) { 
         if (!this.isActiveProcess) {
             this.isActiveProcess = true;
-            console.log('[reject]', error); 
+            console.error('[reject]', error); 
         }
     }
 
@@ -36,53 +36,26 @@ function Vlad8zavrPromise(callback) {
 
 }
 
-const promise = new Vlad8zavrPromise((resolve, reject) => {
-    setTimeout(() => {
+const promise = new Vlad8zavrPromise(function(resolve, reject) {
+    setTimeout(function() {
 
-        // let isSuccess = Math.floor(Math.random() * 10) > 4;
-        // if (isSuccess) resolve(2);
-        // else reject('error message');
+        let isSuccess = Math.floor(Math.random() * 10) > 4;
+        if (isSuccess) resolve(2);
+        else reject('error message');
 
-        setTimeout(() => { resolve(2); }, 1000);
-        setTimeout(() => { reject('error message'); }, 500);
+        // setTimeout(function() { resolve(2); }, 1000);
+        // setTimeout(function() { reject('error message'); }, 500);
 
     }, 1000)
 })
 
 promise
-    .then(num => num += 2)
-    .then(num => num += 2)
-    .then(num => { console.log(num); })
+    .then(function(num) { return num + 2; })
+    .then(function(num) { return num + 2; })
+    .then(function(num) { console.log(num); })
 
 
 
-
-// let promise1 = new Vlad8zavrPromise((resolve, reject) => {
-//     console.log('----- promise -----');
-//     resolve(1);
-//     //reject();
-//     console.log('-------------------');
-// })
-
-// promise1
-//     .then((num) => {
-//         return new Vlad8zavrPromise((resolve, reject) => {
-//             setTimeout(() => {
-//                 console.log('----1----');
-//                 console.log(`THEN OPTION ${num}`);
-//                 resolve(num++);
-//             }, 1000)
-//         })
-//     })
-//     .then((num) => {
-//         return new Vlad8zavrPromise((resolve, reject) => {
-//             setTimeout(() => {
-//                 console.log('----2----');
-//                 console.log(`THEN OPTION ${num}`);
-//                 resolve(num++);
-//             }, 500)
-//         })
-//     })
 
 
 

@@ -6,13 +6,16 @@ function Vlad8zavrPromise(callback) {
     this.isActiveProcess = false;
 
     function resolve(data) {
-        if (!this.isActiveProcess) this.isActiveProcess = true;
-        this.thenChain.forEach(callbackItem => {
-            data = callbackItem(data);
-        })
+        if (!this.isActiveProcess) {
+            this.isActiveProcess = true;
+            this.thenChain.forEach(callbackItem => {
+                data = callbackItem(data);
+            })
+        }
     }
     function reject(error) { 
         if (!this.isActiveProcess) {
+            this.isActiveProcess = true;
             console.log('[reject]', error); 
         }
     }
@@ -40,8 +43,8 @@ const promise = new Vlad8zavrPromise((resolve, reject) => {
         // if (isSuccess) resolve(2);
         // else reject('error message');
 
-        setTimeout(() => { resolve(2); }, 500);
-        setTimeout(() => { reject('error message'); }, 1000);
+        setTimeout(() => { resolve(2); }, 1000);
+        setTimeout(() => { reject('error message'); }, 500);
 
     }, 1000)
 })

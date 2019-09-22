@@ -7,13 +7,11 @@
 1. Цепочка промисов, в ходе которой изначальное число удваивается несколько раз
 
 ```javascript
-const promise = new Vlad8zavrPromise(function(resolve, reject) {
+const promise = new Promise(function(resolve, reject) {
     setTimeout(function() {
 
-        // set a 50% chance of success
-        let isSuccess = Math.floor(Math.random() * 10) > 4;
-        if (isSuccess) resolve(2);
-        else reject('error message in 1-st promise');
+        setTimeout(function() { resolve(2); }, 1000);
+        setTimeout(function() { reject('error message'); }, 500);
 
     }, 1000) 
 })
@@ -29,7 +27,7 @@ promise
 2. Данный случай показывает, что `resolve()` не будет выполняться после того, как выполнился `reject()`. Верно и обратное.
 
 ```javascript
-const promise = new Vlad8zavrPromise(function(resolve, reject) {
+const promise = new Promise(function(resolve, reject) {
     setTimeout(function() {
 
         setTimeout(function() { resolve(2); }, 1000);
@@ -52,7 +50,7 @@ promise
 
 ```javascript
     .then(function(num) { 
-        return new Vlad8zavrPromise(function (resolve, reject) { resolve(5) })
+        return new Promise(function (resolve, reject) { resolve(5) })
     })
 ```
 
